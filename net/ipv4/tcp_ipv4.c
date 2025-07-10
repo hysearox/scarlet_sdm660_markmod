@@ -2558,6 +2558,10 @@ static int __net_init tcp_sk_init(struct net *net)
 		*per_cpu_ptr(net->ipv4.tcp_sk, cpu) = sk;
 	}
 
+	/* 0 Disable ECN. Neither initiate nor accept ECN.
+	 * 1 Enable ECN when requested by incoming connections and also request ECN on outgoing connection attempts.
+	 * 2 Enable ECN when requested by incoming connections but do not request ECN on outgoing connections.
+	 * Default: 1 */
 	net->ipv4.sysctl_tcp_ecn = 1;
 	net->ipv4.sysctl_tcp_ecn_fallback = 1;
 
@@ -2605,7 +2609,7 @@ static int __net_init tcp_sk_init(struct net *net)
 	 */
 	net->ipv4.sysctl_tcp_tso_win_divisor = 3;
 	/* Default TSQ limit of four TSO segments */
-	net->ipv4.sysctl_tcp_limit_output_bytes = 262144;
+	net->ipv4.sysctl_tcp_limit_output_bytes = 16 * 65536;;
 	/* rfc5961 challenge ack rate limiting */
 	net->ipv4.sysctl_tcp_challenge_ack_limit = 1000;
 	net->ipv4.sysctl_tcp_min_tso_segs = 2;
